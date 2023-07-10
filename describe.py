@@ -48,6 +48,10 @@ def main(csv_path: str):
     header = input_data_list[0]
     numerical_feature_start_pos = 6
     numerical_feature_list = header[numerical_feature_start_pos:]
+    short_numerical_feature_list = []
+    for feature in numerical_feature_list:
+        short_numerical_feature_list.append(feature[:5])
+
     input_data_list = input_data_list[1:len(input_data_list)]
 
     count_list = []
@@ -58,7 +62,7 @@ def main(csv_path: str):
     threshold_25_list = []
     threshold_50_list = []
     threshold_75_list = []
-    for i in range(len(numerical_feature_list)):
+    for i in range(len(short_numerical_feature_list)):
         col_num = i + numerical_feature_start_pos
         count = 0
         data_sum = 0.0
@@ -88,7 +92,7 @@ def main(csv_path: str):
         threshold_50_list.append(threshold_50)
         threshold_75_list.append(threshold_75)
 
-    display_result(numerical_feature_list, count_list, mean_list, std_list, min_list, max_list, threshold_25_list, threshold_50_list, threshold_75_list)
+    display_result(short_numerical_feature_list, count_list, mean_list, std_list, min_list, max_list, threshold_25_list, threshold_50_list, threshold_75_list)
 
 
 if __name__ == '__main__':
