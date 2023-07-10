@@ -1,6 +1,7 @@
 import csv
-import sys
 import math
+import sys
+
 from tabulate import tabulate
 
 
@@ -27,7 +28,17 @@ def calculate_threshold_by_ratio(input_data_list, col_num, count, ratio):
     return value_list[int(threshold_index)]
 
 
-def display_result(numerical_feature_list, count_list, mean_list, std_list, min_list, max_list, threshold_25_list, threshold_50_list, threshold_75_list):
+def display_result(
+    numerical_feature_list,
+    count_list,
+    mean_list,
+    std_list,
+    min_list,
+    max_list,
+    threshold_25_list,
+    threshold_50_list,
+    threshold_75_list,
+):
     count_list.insert(0, "Count")
     mean_list.insert(0, "Mean")
     std_list.insert(0, "Std")
@@ -36,13 +47,23 @@ def display_result(numerical_feature_list, count_list, mean_list, std_list, min_
     threshold_50_list.insert(0, "50%")
     threshold_75_list.insert(0, "75%")
     max_list.insert(0, "Max")
-    data = [count_list, mean_list, std_list, min_list, threshold_25_list, threshold_50_list, threshold_75_list, max_list]
+    data = [
+        count_list,
+        mean_list,
+        std_list,
+        min_list,
+        threshold_25_list,
+        threshold_50_list,
+        threshold_75_list,
+        max_list,
+    ]
+
     print(tabulate(data, headers=numerical_feature_list))
 
 
 def main(csv_path: str):
     with open(csv_path) as f:
-        reader = csv.reader(f, delimiter=',')
+        reader = csv.reader(f, delimiter=",")
         input_data_list = [row for row in reader]
 
     header = input_data_list[0]
@@ -52,7 +73,7 @@ def main(csv_path: str):
     for feature in numerical_feature_list:
         short_numerical_feature_list.append(feature[:5])
 
-    input_data_list = input_data_list[1:len(input_data_list)]
+    input_data_list = input_data_list[1 : len(input_data_list)]
 
     count_list = []
     mean_list = []
@@ -80,9 +101,16 @@ def main(csv_path: str):
 
         mean = data_sum / count
         std = calculate_std(input_data_list, col_num, mean, count)
-        threshold_25 = calculate_threshold_by_ratio(input_data_list, col_num, count, 0.25)
-        threshold_50 = calculate_threshold_by_ratio(input_data_list, col_num, count, 0.5)
-        threshold_75 = calculate_threshold_by_ratio(input_data_list, col_num, count, 0.75)
+        threshold_25 = calculate_threshold_by_ratio(
+            input_data_list, col_num, count, 0.25
+        )
+        threshold_50 = calculate_threshold_by_ratio(
+            input_data_list, col_num, count, 0.5
+        )
+        threshold_75 = calculate_threshold_by_ratio(
+            input_data_list, col_num, count, 0.75
+        )
+
         count_list.append(count)
         mean_list.append(mean)
         std_list.append(std)
@@ -92,12 +120,24 @@ def main(csv_path: str):
         threshold_50_list.append(threshold_50)
         threshold_75_list.append(threshold_75)
 
-    display_result(short_numerical_feature_list, count_list, mean_list, std_list, min_list, max_list, threshold_25_list, threshold_50_list, threshold_75_list)
+    display_result(
+        short_numerical_feature_list,
+        count_list,
+        mean_list,
+        std_list,
+        min_list,
+        max_list,
+        threshold_25_list,
+        threshold_50_list,
+        threshold_75_list,
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Argument is wrong. Please pass the file path as an argument like `describe.py dataset/dataset_train.csv`.")
+        print(
+            "Argument is wrong. Please pass the file path as an argument like `describe.py dataset/dataset_train.csv`."
+        )
         exit(1)
 
     main(sys.argv[1])
