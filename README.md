@@ -8,7 +8,7 @@ The following commands can be used to obtain statistical information about the d
 python describe.py dataset/dataset_train.csv
 ```
 
-<img src='images/data.png' width='700'>
+<img src='images/describe.png' width='700'>
 
 <br></br>
 
@@ -32,5 +32,7 @@ python scatter_plot.py --data_file_path dataset/dataset_train.csv --x_item Astro
 ### Pair plot
 
 ```bash
-python pair_plot.py --data_file_path dataset/dataset_train.csv --x_item Astronomy --y_item Herbology
+python pair_plot.py dataset/dataset_train.csv
 ```
+
+<img src='images/pair_plot.png' width='700'>
