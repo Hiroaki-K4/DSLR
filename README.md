@@ -28,3 +28,9 @@ python scatter_plot.py --data_file_path dataset/dataset_train.csv --x_item Astro
 ```
 
 <img src='images/scatter_plot.png' width='700'>
+
+### Pair plot
+
+```bash
+python pair_plot.py --data_file_path dataset/dataset_train.csv --x_item Astronomy --y_item Herbology
+```

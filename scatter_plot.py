@@ -4,25 +4,9 @@ import csv
 import matplotlib.pyplot as plt
 
 
-def main(data_file_path, x_item, y_item):
-    with open(data_file_path) as f:
-        reader = csv.reader(f, delimiter=",")
-        input_data_list = [row for row in reader]
-
-    header = input_data_list[0]
-    numerical_feature_start_pos = 6
-    numerical_feature_list = header[numerical_feature_start_pos:]
-    input_data_list = input_data_list[1 : len(input_data_list)]
-    if not x_item in numerical_feature_list or not y_item in numerical_feature_list:
-        raise RuntimeError("The argument of item is wrong.")
-
-    x_item_idx = header.index(x_item)
-    y_item_idx = header.index(y_item)
-
-    type_0 = "Gryffindor"
-    type_1 = "Hufflepuff"
-    type_2 = "Ravenclaw"
-    type_3 = "Slytherin"
+def prepare_scatter_plot(
+    input_data_list, x_item_idx, y_item_idx, type_0, type_1, type_2, type_3
+):
     gryffindor_x_list = []
     gryffindor_y_list = []
     hufflepuff_x_list = []
@@ -48,6 +32,50 @@ def main(data_file_path, x_item, y_item):
             else:
                 print("Wrong name of Hogwarts House.")
                 continue
+
+    return (
+        gryffindor_x_list,
+        gryffindor_y_list,
+        hufflepuff_x_list,
+        hufflepuff_y_list,
+        ravenclaw_x_list,
+        ravenclaw_y_list,
+        slytherin_x_list,
+        slytherin_y_list,
+    )
+
+
+def main(data_file_path, x_item, y_item):
+    with open(data_file_path) as f:
+        reader = csv.reader(f, delimiter=",")
+        input_data_list = [row for row in reader]
+
+    header = input_data_list[0]
+    numerical_feature_start_pos = 6
+    numerical_feature_list = header[numerical_feature_start_pos:]
+    input_data_list = input_data_list[1 : len(input_data_list)]
+    if not x_item in numerical_feature_list or not y_item in numerical_feature_list:
+        raise RuntimeError("The argument of item is wrong.")
+
+    x_item_idx = header.index(x_item)
+    y_item_idx = header.index(y_item)
+
+    type_0 = "Gryffindor"
+    type_1 = "Hufflepuff"
+    type_2 = "Ravenclaw"
+    type_3 = "Slytherin"
+    (
+        gryffindor_x_list,
+        gryffindor_y_list,
+        hufflepuff_x_list,
+        hufflepuff_y_list,
+        ravenclaw_x_list,
+        ravenclaw_y_list,
+        slytherin_x_list,
+        slytherin_y_list,
+    ) = prepare_scatter_plot(
+        input_data_list, x_item_idx, y_item_idx, type_0, type_1, type_2, type_3
+    )
 
     plt.scatter(gryffindor_x_list, gryffindor_y_list, c="red", label=type_0)
     plt.scatter(hufflepuff_x_list, hufflepuff_y_list, c="yellow", label=type_1)
