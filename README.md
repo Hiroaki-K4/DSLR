@@ -18,3 +18,5 @@ python describe.py dataset/dataset_train.csv
 ```bash
 python histogram.py dataset/dataset_train.csv
 ```
+
+<img src='images/histogram.png' width='700'>
