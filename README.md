@@ -36,3 +36,11 @@ python pair_plot.py dataset/dataset_train.csv
 ```
 
 <img src='images/pair_plot.png' width='700'>
+
+<br></br>
+
+## Logistic Regression
+
+```bash
+python logreg_train.py dataset/dataset_train.csv
+```
