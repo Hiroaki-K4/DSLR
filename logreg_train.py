@@ -89,6 +89,9 @@ def calculate_cost_func(input_data: List, label_data: List, params):
 def calculate_cost_derivative(input_data, label_data, param_arr, idx):
     der_sum = 0
     for i in range(len(input_data)):
+        print("sig: ", calculate_sigmoid(param_arr, np.array(input_data[i])))
+        print("label: ", label_data[i])
+        # input()
         der_sum += (calculate_sigmoid(param_arr, np.array(input_data[i])) - label_data[i]) * input_data[i][idx]
 
     return der_sum / len(input_data)
@@ -98,7 +101,7 @@ def update_params(param_arr, lr_rate, input_data, label_data):
     new_params = []
     for i in range(param_arr.shape[0]):
         cost_der = calculate_cost_derivative(input_data, label_data, param_arr, i)
-        # print(param_arr[i])
+        # TODO: Understand why cost increase
         new_param = param_arr[i] - lr_rate * cost_der
         # print(new_param)
         # input()
@@ -110,7 +113,7 @@ def update_params(param_arr, lr_rate, input_data, label_data):
 def logistic_regression(input_data: List, label_data: List):
     param_arr = np.zeros(len(input_data[0]))
     # param_arr = np.ones(len(input_data[0]))
-    lr_rate = 1e-3
+    lr_rate = 1e-1
     thr = 1e-5
     iterations = 100000
     # p = np.array([1.2, 1.3])
