@@ -42,5 +42,5 @@ python pair_plot.py dataset/dataset_train.csv
 ## Logistic Regression
 
 ```bash
-python logreg_train.py dataset/dataset_train.csv
+python logreg_train.py --train_data_path dataset/dataset_train.csv --output_param_path param/param.yaml
 ```
