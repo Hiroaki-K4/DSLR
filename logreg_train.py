@@ -7,22 +7,25 @@ import numpy as np
 import yaml
 
 
-def normalize_range(data_arr):
-    min_list = []
-    max_list = []
-    remv_num = 1
-    for i in range(remv_num, data_arr.shape[1]):
-        col = data_arr[:, i]
-        min_list.append(min(col))
-        max_list.append(max(col))
-
-    for j in range(data_arr.shape[0]):
-        for k in range(remv_num, data_arr.shape[1]):
-            data_arr[j, k] = (data_arr[j, k] - min_list[k - 1]) / (
-                max_list[k - 1] - min_list[k - 1]
+def normalize_range(data_arr, min_list, max_list, remv_num):
+    for i in range(data_arr.shape[0]):
+        for j in range(remv_num, data_arr.shape[1]):
+            data_arr[i, j] = (data_arr[i, j] - min_list[j - 1]) / (
+                max_list[j - 1] - min_list[j - 1]
             )
 
     return data_arr
+
+
+def get_min_max(data_arr, remv_num):
+    min_list = []
+    max_list = []
+    for i in range(remv_num, data_arr.shape[1]):
+        col = data_arr[:, i]
+        min_list.append(float(min(col)))
+        max_list.append(float(max(col)))
+
+    return min_list, max_list
 
 
 def get_input_means(input_data_list, not_num_feat):
@@ -55,9 +58,9 @@ def preprocess_input_data(input_data_list: List, target_house_type: str):
         numerical_data = data[not_num_feat:]
         numerical_data.insert(0, 1)
 
-        for i in range(len(numerical_data)):
+        for i in range(1, len(numerical_data)):
             if numerical_data[i] == "":
-                numerical_data[i] = input_mean_list[i + 1]
+                numerical_data[i] = input_mean_list[i - 1]
             numerical_data[i] = float(numerical_data[i])
 
         input_data.append(numerical_data)
@@ -67,7 +70,7 @@ def preprocess_input_data(input_data_list: List, target_house_type: str):
             "The data size is different between input_data and label_data."
         )
 
-    return input_data, label_data
+    return input_data, input_mean_list, label_data
 
 
 def calculate_sigmoid(params, inputs):
@@ -108,9 +111,9 @@ def update_params(param_arr, lr_rate, input_data, label_data):
 
 def logistic_regression(input_data: List, label_data: List):
     param_arr = np.zeros(len(input_data[0]))
-    lr_rate = 1e-3
-    thr = 1e-5
-    iterations = 10000
+    lr_rate = 0.1
+    thr = 1e-6
+    iterations = 100000
     prev_cost = 100000
     for i in range(iterations):
         param_arr = update_params(param_arr, lr_rate, input_data, label_data)
@@ -127,13 +130,19 @@ def logistic_regression(input_data: List, label_data: List):
     return param_arr
 
 
-def save_parameters(param_list, house_list, output_param_path):
+def save_parameters(
+    param_list, house_list, min_list, max_list, mean_list, output_param_path
+):
     if len(param_list) != len(house_list):
-        raise RuntimeError("The length of parameter list and house list is different")
+        raise RuntimeError("The lengths of parameter list and house list are different")
 
     data = {}
     for i in range(len(house_list)):
         data[house_list[i]] = param_list[i]
+
+    data["min_list"] = min_list
+    data["max_list"] = max_list
+    data["mean_list"] = mean_list.tolist()
 
     with open(output_param_path, "w") as output_file:
         yaml.dump(data, output_file)
@@ -146,14 +155,21 @@ def train(train_data_path: str, output_param_path: str):
 
     house_list = ["Gryffindor", "Hufflepuff", "Ravenclaw", "Slytherin"]
     param_list = []
+    remv_num = 1
     for i in range(len(house_list)):
-        input_data, label_data = preprocess_input_data(input_data_list, house_list[i])
+        print("Train {0} model ...".format(house_list[i]))
+        input_data, input_mean_list, label_data = preprocess_input_data(
+            input_data_list, house_list[i]
+        )
         input_data = np.array(input_data)
-        norm_input_data = normalize_range(input_data)
+        min_list, max_list = get_min_max(input_data, remv_num)
+        norm_input_data = normalize_range(input_data, min_list, max_list, remv_num)
         param_arr = logistic_regression(norm_input_data, label_data)
         param_list.append(param_arr.tolist())
 
-    save_parameters(param_list, house_list, output_param_path)
+    save_parameters(
+        param_list, house_list, min_list, max_list, input_mean_list, output_param_path
+    )
 
 
 if __name__ == "__main__":
