@@ -67,7 +67,28 @@ python pair_plot.py dataset/dataset_train.csv
 ## Logistic Regression
 You arrive at the last part: code your Magic Hat. To do this, you have to perform a multi-classifier using a logistic regression one-vs-all.
 
-### Algorithm
+We utilize the sigmoid function to map input values from a wide range into a limited interval. Mathematically, the sigmoid function is:
+
+$$
+y=g(z)=\frac{1}{1+e^{-z}}
+$$
+
+This formula represents the probability of observing the output y = 1 of a Bernoulli random variable. This variable is either 1 or 0 (y \in {0,1}).
+It squeezes any real number to the (0,1) open interval. Thus, it’s better suited for classification. Moreover, it’s less sensitive to outliers, unlike linear regression:
+
+More formally, we define the logistic regression model for binary classification problems. We choose the hypothesis function to be the sigmoid function:
+
+$$
+h_\theta(x)=\frac{1}{1+e^{-\theta^Tx}}
+$$
+
+### Cost function
+In linear regression, we use mean squared error (MSE) as the cost function. But in logistic regression, using the mean of the squared differences between actual and predicted outcomes as the cost function might give a wavy, non-convex solution; containing many local optima:
+
+In this case, finding an optimal solution with the gradient descent method is not possible. Instead, we use a logarithmic function to represent the cost of logistic regression. It is guaranteed to be convex for all input values, containing only one minimum, allowing us to run the gradient descent algorithm.
+
+When dealing with a binary classification problem, the logarithmic cost of error depends on the value of y. We can define the cost for two cases separately:
+
 
 ### Training
 Create a logistic regression model for the four dormitories. Each model should be trained to output 1 for the target dormitory and 0 for the other dormitories.
@@ -79,6 +100,7 @@ python logreg_train.py --train_data_path dataset/dataset_train.csv --output_para
 ```
 
 ### Prediction
+The outputs of the sigmoid functions of the four models are compared and the house with the largest output value is output as the result. The result for the test data(dataset/dataset_test.csv) was **99.0%**.
 
 The following commands can be used to predict a house about the test data.
 
