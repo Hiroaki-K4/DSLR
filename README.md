@@ -89,9 +89,22 @@ In this case, finding an optimal solution with the gradient descent method is no
 
 When dealing with a binary classification problem, the logarithmic cost of error depends on the value of y. We can define the cost for two cases separately:
 
+$$
+cost(h_\theta(x),y)=\begin{cases}-log(h_\theta(x)) & (y=1) \\ -log(1-h_\theta(x)) & (y=0) \end{cases}
+$$
+
+### Minimize the cost with gradient descent
+
+For m observations, we can calculate the cost as:
+
+$$
+J(\theta)=-\frac{1}{m}\sum_{i=1}^{m}y_i log(h_\theta(x_i))+(1-y_i)log(1-h_\theta(x_i))
+$$
 
 ### Training
 Create a logistic regression model for the four dormitories. Each model should be trained to output 1 for the target dormitory and 0 for the other dormitories.
+
+TODO: write about normalization
 
 The following commands can be used to train a model about the data by using logistic regression.
 
