@@ -30,7 +30,10 @@ python describe.py dataset/dataset_train.csv
 Data visualization is a powerful tool for a data scientist. It allows you to make insights and develop an intuition of what your data looks like. Visualizing your data also allows you to detect defects or anomalies.
 
 ### Histogram
+`
 Which Hogwarts course has a homogeneous score distribution between all four houses?
+`
+
 
 The following commands can be used to obtain a histogram about the data.
 
@@ -41,7 +44,7 @@ python histogram.py dataset/dataset_train.csv
 <img src='images/histogram.png' width='700'>
 
 ### Scatter plot
-What are the two features that are similar ?
+`What are the two features that are similar ?`
 
 The following commands can be used to obtain a scatter plot about the data.
 
@@ -52,7 +55,7 @@ python scatter_plot.py --data_file_path dataset/dataset_train.csv --x_item Astro
 <img src='images/scatter_plot.png' width='700'>
 
 ### Pair plot
-From this visualization, what features are you going to use for your logistic regression?
+`From this visualization, what features are you going to use for your logistic regression?`
 
 The following commands can be used to obtain a pair plot about the data.
 
@@ -65,7 +68,7 @@ python pair_plot.py dataset/dataset_train.csv
 <br></br>
 
 ## Logistic Regression
-You arrive at the last part: code your Magic Hat. To do this, you have to perform a multi-classifier using a logistic regression one-vs-all.
+`You arrive at the last part: code your Magic Hat. To do this, you have to perform a multi-classifier using a logistic regression one-vs-all.`
 
 We utilize the sigmoid function to map input values from a wide range into a limited interval. Mathematically, the sigmoid function is:
 
@@ -73,7 +76,9 @@ $$
 y=g(z)=\frac{1}{1+e^{-z}}
 $$
 
-This formula represents the probability of observing the output y = 1 of a Bernoulli random variable. This variable is either 1 or 0 (y \in {0,1}).
+<img src='images/sigmoid.png' width='600'>
+
+This formula represents the probability of observing the output y = 1 of a Bernoulli random variable.
 It squeezes any real number to the (0,1) open interval. Thus, it’s better suited for classification. Moreover, it’s less sensitive to outliers, unlike linear regression:
 
 More formally, we define the logistic regression model for binary classification problems. We choose the hypothesis function to be the sigmoid function:
@@ -93,7 +98,7 @@ $$
 cost(h_\theta(x),y)=\begin{cases}-log(h_\theta(x)) & (y=1) \\ -log(1-h_\theta(x)) & (y=0) \end{cases}
 $$
 
-### Minimize the cost with gradient descent
+<img src='images/log.png' width='600'>
 
 For m observations, we can calculate the cost as:
 
@@ -101,10 +106,30 @@ $$
 J(\theta)=-\frac{1}{m}\sum_{i=1}^{m}y_i log(h_\theta(x_i))+(1-y_i)log(1-h_\theta(x_i))
 $$
 
-### Training
-Create a logistic regression model for the four dormitories. Each model should be trained to output 1 for the target dormitory and 0 for the other dormitories.
+### Minimize the cost with gradient descent
+Assume we have a total of n features. In this case, we have n parameters for the $\theta$ vector. To minimize our cost function, we need to run the gradient descent on each parameter $\theta_j$:
 
-TODO: write about normalization
+$$
+\theta_j \leftarrow \theta_j-\alpha\frac{\partial}{\partial\theta_j}J(\theta)
+$$
+
+The derivative of the cost function is as follows.
+
+$$
+\frac{\partial}{\partial\theta_j}J(\theta)=\frac{1}{m}\sum_{i=1}^{m}(h_\theta(x^{(i)})-y^{(i)})x_j^{(i)}
+$$
+
+Update the parameters using the learning rate $\alpha$.
+
+$$
+\theta_j \leftarrow \theta_j-\alpha\frac{1}{m}\sum_{i=1}^{m}(h_\theta(x^{(i)})-y^{(i)})x_j^{(i)}
+$$
+
+After updating the parameters, the cost function is calculated again, and if it is lower than the threshold, it is taken as the final result; otherwise, the parameters are updated again. In this case, 0.1 is used for the learning rate.
+
+### Training
+Create a logistic regression model for the four houses. Each model should be trained to output 1 for the target house and 0 for the other houses.
+To stabilize the learning, [scaling to a range](https://developers.google.com/machine-learning/data-prep/transform/normalization) is used as normalization.
 
 The following commands can be used to train a model about the data by using logistic regression.
 
