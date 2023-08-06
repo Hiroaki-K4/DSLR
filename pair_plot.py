@@ -24,7 +24,7 @@ def main(csv_path: str):
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print(
-            "Argument is wrong. Please pass the file path as an argument like `describe.py dataset/dataset_train.csv`."
+            "Argument is wrong. Please pass the file path as an argument like `python3 pair_plot.py dataset/dataset_train.csv`."
         )
         exit(1)
 
